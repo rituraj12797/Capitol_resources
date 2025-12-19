@@ -4,3 +4,4 @@
 ### C++
 
 1. Local variables vs Static variables. - locstat.cpp
+2. SSO- smaller string (<= 15 16 chars normally) - SSO.cpp
