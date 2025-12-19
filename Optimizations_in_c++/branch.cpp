@@ -320,8 +320,8 @@ int main() {
  now here as we can see the optimization treated the ternary not like a jump but nullified jump by using CMOV  to treat this as  mathematical comparison rather then a jump, interestingly it also clever enough to identify our branched code's pattern and also optimised it as mathemtical form and thus all the 4 results are nerla same with the first 2 being a bit messy due to more instruction and the compiler needed to interepret and process them to judge them in mathetical form
 
 
- 
 
+ LESSONS LEarn : it is a must to be good in CP and maths to write less branched less messy code and more mathematically inclined so do CP so that you can also think how can you write such beautifull pieces of code 
 
 
     
