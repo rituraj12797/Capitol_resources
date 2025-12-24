@@ -1,7 +1,14 @@
-#include<stdio.h>
 #include<iostream>
-using namespace std;
+#include<thread>
+void func() {
+    std::cout<<" Hello from thread \n";
+}
 
 int main() {
-    cout<<" Hello world! \n";
+
+    std::thread t1(func);
+    t1.join();
+
+    std::cout<<" finished execution \n";
+
 }

@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/VICTUS/Desktop/Capitol_resources/build",
+  "command": "C:\\mingw64\\bin\\g++.exe   -g -std=gnu++17 -o CMakeFiles\\hello.dir\\source\\main.cpp.obj -c C:\\Users\\VICTUS\\Desktop\\Capitol_resources\\getting_started_with_writing_cli_in_C++\\demo\\source\\main.cpp",
+  "file": "C:/Users/VICTUS/Desktop/Capitol_resources/getting_started_with_writing_cli_in_C++/demo/source/main.cpp",
+  "output": "CMakeFiles/hello.dir/source/main.cpp.obj"
+}
+]

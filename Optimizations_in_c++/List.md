@@ -8,5 +8,6 @@
 3. Branch Predictability and Mispredictions - branch.cpp
 4. Loop Unrolling - Loop.cpp 
 5. Optimization Macros - macro.cpp
+6. Profile Guided Optimization - pgo.cpp
 
 
