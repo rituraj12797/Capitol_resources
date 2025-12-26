@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\createthread.dir/objects.a
+C:\mingw64\bin\ar.exe qc CMakeFiles\createthread.dir/objects.a @CMakeFiles\createthread.dir\objects1.rsp
+C:\mingw64\bin\c++.exe -Wl,--whole-archive CMakeFiles\createthread.dir/objects.a -Wl,--no-whole-archive -o createthread.exe -Wl,--out-implib,libcreatethread.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\createthread.dir\linkLibs.rsp
