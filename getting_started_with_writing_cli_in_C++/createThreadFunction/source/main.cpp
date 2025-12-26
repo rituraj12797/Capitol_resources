@@ -2,6 +2,7 @@
 #include<thread>
 #include<chrono>
 #include<atomic>
+#include<windows.h> // for setting affinity on windows 
 
 
 void func(int a, int b, std::string& name) {
@@ -48,7 +49,25 @@ void func(int a, int b, std::string& name) {
     }
 
 bool setThreadCoreAffinity(int core_id) {
+    HANDLE current_thread = GetCurrentThread(); // return a handler to the thread which is calling this function
 
+    // when new thread is created it will run this body hence using this handler we can reference to the new thread and not the main thread 
+
+    // unlike linux, windows expects an affinity mask to set affinity
+    // 1<<0 --> 0th core
+    // 1<<2 --> 2nd core ==> 000100 ==> this process can only run on 2nd core and not on any other core ==> soft affinity
+    // 1<<1 --> 1st core
+    // 1<<5 --> 5th core
+    
+
+    DWORD_PTR mask = (static_cast<DWORD_PTR>(1) << core_id);
+
+    DWORD_PTR result= SetThreadAffinityMask(current_thread,mask);
+
+    if(result == 0) {
+        return false;
+    }
+    return true;
 }
 
 int main() {
