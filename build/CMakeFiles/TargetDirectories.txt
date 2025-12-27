@@ -1,3 +1,0 @@
-C:/Users/VICTUS/Desktop/Capitol_resources/build/CMakeFiles/hello.dir
-C:/Users/VICTUS/Desktop/Capitol_resources/build/CMakeFiles/edit_cache.dir
-C:/Users/VICTUS/Desktop/Capitol_resources/build/CMakeFiles/rebuild_cache.dir
