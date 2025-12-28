@@ -3,7 +3,8 @@
 
 
 // definition of this memory pool class, we may define pools of different different types based on objects types 
-template<typename T> class MemPool {
+template<typename T>
+class MemPool {
     // memblock struct
     private : 
     struct ObjectBlock{
@@ -39,6 +40,36 @@ template<typename T> class MemPool {
         MemPool(const MemPool&&) = delete;
         MemPool& operator=(const MemPool&) = delete;
         MemPool& operator=(const MemPool&&) = delete;
+    }
+
+    template<Args... args> 
+    // T* means the response of this function will be a variable which points to on entity of Type T whihc is what we exactly want to do here.
+    T* allocate(Args&... args) noexcept {
+        auto obj_ptr = &(store[next_free_index]);
+
+        ASSERT(!(obj_ptr->is_occupied), " ERROR : Expected free space at :"+std::to_string(next_free_index)+" index in MemPool");
+        // how asserts work is ==> when the condition mentioned inside is true then it will move on else it will give error message 
+
+        // we want to ensurebefore movign on that the space we are allocating is non allocatd i.e. is_allocated is false.
+
+
+
+        T* ptr = &(store[next_free_index].object);
+        // a ptr, pointing to a data of Type T;
+
+        // ptr = new T(args...);    ==> CRITICAL BUG ==> this is standard allocation whihc means it will ask the OS to fetch storage from heap and allocate here 
+
+        // to give memory from our memory pool we use the placement new, what it does is it will take teh location you are pointing to and construct the Object exactly at that location in memory.
+
+        // i.e why in thsi step we create T at the exact memory location inside our mempool not asking the OS for memory from heap
+        ptr = new(ptr) T(std::forward<Args>(args)...);  
+        //std::forward<Args>(args)... ==> perfect forwarding ==> it transfers the arguements received as it is without copying
+
+        obj_ptr->is_occupied = true; // this is occupied now
+
+        updateNextFreeIndex(); // update the nextFreeIndex variable
+
+        return ptr;
     }
 };
 
