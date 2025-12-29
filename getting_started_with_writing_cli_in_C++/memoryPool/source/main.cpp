@@ -1,6 +1,8 @@
 #include<iostream>
 #include<vector>
 
+#define LIKELY(x) __builtin_expect(!!(x),1);
+#define UNLIKELY(x) __builtin_expect(!!(x),0);
 
 // definition of this memory pool class, we may define pools of different different types based on objects types 
 template<typename T>
@@ -44,7 +46,7 @@ class MemPool {
 
     template<Args... args> 
     // T* means the response of this function will be a variable which points to on entity of Type T whihc is what we exactly want to do here.
-    T* allocate(Args&... args) noexcept {
+    T* allocate(Args&... args) noexcept {            // ALLOCATOR
         auto obj_ptr = &(store[next_free_index]);
 
         ASSERT(!(obj_ptr->is_occupied), " ERROR : Expected free space at :"+std::to_string(next_free_index)+" index in MemPool");
@@ -71,5 +73,37 @@ class MemPool {
 
         return ptr;
     }
+
+    auto updateNextFreeInde() noexcept {
+        size_t cur_ind = next_free_index; // to keep track of where we are right now;
+
+        while(store[next_free_index].is_occupied) {
+            // untill the current pointer is updated 
+            next_free_index++;
+            if(UNLIKELY(next_free_index == store.size())) {
+                // loop around and set the next_free index to 0
+                next_free_index = 0;
+            }
+
+            if(UNLIKELY(next_free_index == cur_ind)) {
+                // we came back where we started from ==> no free space in MemPool
+               ASSERT(cur_ind != next_free_index, "ERROR : MemPool out of space. ");
+            }
+        }
+    }
+
+    // DEALLOCATOR
+    auto deAllocate(T *object_pointer) noexcept {
+
+        const auto index = reinterpret_cast<ObjectBlock *>(object_pointer) - &(store[0]);
+
+        ASSERT(index >= 0 && static_cast<size_t>(index) < store.size(), " Object with address : ",object_pointer," does not lie in MemPool ");
+
+        ASSERT(store[index].is_occupied, " Expected the index : ",index, " to be occupied, but it is free.")
+
+        store[index].is_occupied = false;
+
+    }
+
 };
 
