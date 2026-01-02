@@ -1,0 +1,3 @@
+/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/memoryPool/build/CMakeFiles/mempool.dir
+/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/memoryPool/build/CMakeFiles/edit_cache.dir
+/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/memoryPool/build/CMakeFiles/rebuild_cache.dir
