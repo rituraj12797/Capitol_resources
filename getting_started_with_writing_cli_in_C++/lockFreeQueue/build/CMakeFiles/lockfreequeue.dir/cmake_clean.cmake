@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/lockfreequeue.dir/source/main.cpp.o"
-  "CMakeFiles/lockfreequeue.dir/source/main.cpp.o.d"
+  "CMakeFiles/lockfreequeue.dir/app/main.cpp.o"
+  "CMakeFiles/lockfreequeue.dir/app/main.cpp.o.d"
   "lockfreequeue"
   "lockfreequeue.pdb"
 )

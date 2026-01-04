@@ -129,29 +129,29 @@ lockfreequeue/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lockfreequeue.dir/build.make CMakeFiles/lockfreequeue.dir/build
 .PHONY : lockfreequeue/fast
 
-source/main.o: source/main.cpp.o
-.PHONY : source/main.o
+app/main.o: app/main.cpp.o
+.PHONY : app/main.o
 
 # target to build an object file
-source/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lockfreequeue.dir/build.make CMakeFiles/lockfreequeue.dir/source/main.cpp.o
-.PHONY : source/main.cpp.o
+app/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lockfreequeue.dir/build.make CMakeFiles/lockfreequeue.dir/app/main.cpp.o
+.PHONY : app/main.cpp.o
 
-source/main.i: source/main.cpp.i
-.PHONY : source/main.i
+app/main.i: app/main.cpp.i
+.PHONY : app/main.i
 
 # target to preprocess a source file
-source/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lockfreequeue.dir/build.make CMakeFiles/lockfreequeue.dir/source/main.cpp.i
-.PHONY : source/main.cpp.i
+app/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lockfreequeue.dir/build.make CMakeFiles/lockfreequeue.dir/app/main.cpp.i
+.PHONY : app/main.cpp.i
 
-source/main.s: source/main.cpp.s
-.PHONY : source/main.s
+app/main.s: app/main.cpp.s
+.PHONY : app/main.s
 
 # target to generate assembly for a file
-source/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lockfreequeue.dir/build.make CMakeFiles/lockfreequeue.dir/source/main.cpp.s
-.PHONY : source/main.cpp.s
+app/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lockfreequeue.dir/build.make CMakeFiles/lockfreequeue.dir/app/main.cpp.s
+.PHONY : app/main.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... lockfreequeue"
-	@echo "... source/main.o"
-	@echo "... source/main.i"
-	@echo "... source/main.s"
+	@echo "... app/main.o"
+	@echo "... app/main.i"
+	@echo "... app/main.s"
 .PHONY : help
 
 

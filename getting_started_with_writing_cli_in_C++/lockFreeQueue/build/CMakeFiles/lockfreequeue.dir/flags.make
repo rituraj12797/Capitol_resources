@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/core/include
 
-CXX_FLAGS = -std=gnu++17
+CXX_FLAGS = -std=gnu++17 -O3 -march=native -Wall -Wextra
 

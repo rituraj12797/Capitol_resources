@@ -69,28 +69,28 @@ include CMakeFiles/lockfreequeue.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/lockfreequeue.dir/flags.make
 
-CMakeFiles/lockfreequeue.dir/source/main.cpp.o: CMakeFiles/lockfreequeue.dir/flags.make
-CMakeFiles/lockfreequeue.dir/source/main.cpp.o: /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/source/main.cpp
-CMakeFiles/lockfreequeue.dir/source/main.cpp.o: CMakeFiles/lockfreequeue.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/lockfreequeue.dir/source/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lockfreequeue.dir/source/main.cpp.o -MF CMakeFiles/lockfreequeue.dir/source/main.cpp.o.d -o CMakeFiles/lockfreequeue.dir/source/main.cpp.o -c /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/source/main.cpp
+CMakeFiles/lockfreequeue.dir/app/main.cpp.o: CMakeFiles/lockfreequeue.dir/flags.make
+CMakeFiles/lockfreequeue.dir/app/main.cpp.o: /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/app/main.cpp
+CMakeFiles/lockfreequeue.dir/app/main.cpp.o: CMakeFiles/lockfreequeue.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/lockfreequeue.dir/app/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lockfreequeue.dir/app/main.cpp.o -MF CMakeFiles/lockfreequeue.dir/app/main.cpp.o.d -o CMakeFiles/lockfreequeue.dir/app/main.cpp.o -c /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/app/main.cpp
 
-CMakeFiles/lockfreequeue.dir/source/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/lockfreequeue.dir/source/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/source/main.cpp > CMakeFiles/lockfreequeue.dir/source/main.cpp.i
+CMakeFiles/lockfreequeue.dir/app/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/lockfreequeue.dir/app/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/app/main.cpp > CMakeFiles/lockfreequeue.dir/app/main.cpp.i
 
-CMakeFiles/lockfreequeue.dir/source/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/lockfreequeue.dir/source/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/source/main.cpp -o CMakeFiles/lockfreequeue.dir/source/main.cpp.s
+CMakeFiles/lockfreequeue.dir/app/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/lockfreequeue.dir/app/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/app/main.cpp -o CMakeFiles/lockfreequeue.dir/app/main.cpp.s
 
 # Object files for target lockfreequeue
 lockfreequeue_OBJECTS = \
-"CMakeFiles/lockfreequeue.dir/source/main.cpp.o"
+"CMakeFiles/lockfreequeue.dir/app/main.cpp.o"
 
 # External object files for target lockfreequeue
 lockfreequeue_EXTERNAL_OBJECTS =
 
-lockfreequeue: CMakeFiles/lockfreequeue.dir/source/main.cpp.o
+lockfreequeue: CMakeFiles/lockfreequeue.dir/app/main.cpp.o
 lockfreequeue: CMakeFiles/lockfreequeue.dir/build.make
 lockfreequeue: CMakeFiles/lockfreequeue.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable lockfreequeue"

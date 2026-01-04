@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/source/main.cpp" "CMakeFiles/lockfreequeue.dir/source/main.cpp.o" "gcc" "CMakeFiles/lockfreequeue.dir/source/main.cpp.o.d"
+  "/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/app/main.cpp" "CMakeFiles/lockfreequeue.dir/app/main.cpp.o" "gcc" "CMakeFiles/lockfreequeue.dir/app/main.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
