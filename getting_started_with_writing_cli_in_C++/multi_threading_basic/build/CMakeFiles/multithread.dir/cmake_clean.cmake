@@ -1,9 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/multithread.dir/source/main.cpp.obj"
-  "CMakeFiles/multithread.dir/source/main.cpp.obj.d"
-  "libmultithread.dll.a"
-  "multithread.exe"
-  "multithread.exe.manifest"
+  "CMakeFiles/multithread.dir/source/main.cpp.o"
+  "CMakeFiles/multithread.dir/source/main.cpp.o.d"
+  "multithread"
   "multithread.pdb"
 )
 

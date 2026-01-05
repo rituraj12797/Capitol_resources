@@ -24,7 +24,7 @@ int main() {
     // defining threads with lambda function as callable 
     std::thread t([](int n) {
         std::cout<<" this is the number printer function : "<<n<<"\n";
-        for(int i = 0 ; i < 10; i++) {
+        for(int i = 0 ; i < 1000; i++) {
             std::cout<<i<<"\n";
         }
     }, n); //

@@ -1,0 +1,3 @@
+/home/rituraj12797/Capitol_resources/build/CMakeFiles/createthread.dir
+/home/rituraj12797/Capitol_resources/build/CMakeFiles/edit_cache.dir
+/home/rituraj12797/Capitol_resources/build/CMakeFiles/rebuild_cache.dir

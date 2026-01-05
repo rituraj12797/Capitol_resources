@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/VICTUS/Desktop/Capitol_resources/getting_started_with_writing_cli_in_C++/multi_threading_basic/source/main.cpp" "CMakeFiles/multithread.dir/source/main.cpp.obj" "gcc" "CMakeFiles/multithread.dir/source/main.cpp.obj.d"
+  "/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/multi_threading_basic/source/main.cpp" "CMakeFiles/multithread.dir/source/main.cpp.o" "gcc" "CMakeFiles/multithread.dir/source/main.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

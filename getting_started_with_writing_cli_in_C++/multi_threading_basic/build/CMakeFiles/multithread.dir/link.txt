@@ -1,3 +1,1 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\multithread.dir/objects.a
-C:\mingw64\bin\ar.exe qc CMakeFiles\multithread.dir/objects.a @CMakeFiles\multithread.dir\objects1.rsp
-C:\mingw64\bin\c++.exe -Wl,--whole-archive CMakeFiles\multithread.dir/objects.a -Wl,--no-whole-archive -o multithread.exe -Wl,--out-implib,libmultithread.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\multithread.dir\linkLibs.rsp
+/usr/bin/c++ CMakeFiles/multithread.dir/source/main.cpp.o -o multithread 

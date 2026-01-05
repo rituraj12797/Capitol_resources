@@ -7,6 +7,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 find_package(Threads REQUIRED)
 
-add_executable(lockfreequeue source/main.cpp)
+add_executable(lockfreequeue app/main.cpp)
+
+target_include_directories(lockfreequeue PRIVATE ${CMAKE_SOURCE_DIR}/core/include)
 
 target_link_libraries(lockfreequeue PRIVATE Threads::Threads)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(lockfreequeue PRIVATE
+        -O3             # Optimization Level 3 (Aggressive speed optimization)
+        -march=native   # Generate code strictly for YOUR specific CPU (enables AVX/SIMD)
+        -Wall -Wextra   # Show all warnings (Catch bugs early)
+    )
+endif()
+
+

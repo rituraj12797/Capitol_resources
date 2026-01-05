@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/rituraj12797/Capitol_resources/build",
+  "command": "/usr/bin/g++   -g -std=gnu++17 -o CMakeFiles/createthread.dir/source/main.cpp.o -c /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/createThreadFunction/source/main.cpp",
+  "file": "/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/createThreadFunction/source/main.cpp",
+  "output": "CMakeFiles/createthread.dir/source/main.cpp.o"
+}
+]
