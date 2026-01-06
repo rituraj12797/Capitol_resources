@@ -176,4 +176,15 @@ CMakeFiles/lockfreequeue.dir/app/main.cpp.o: \
  /usr/include/c++/13/bits/this_thread_sleep.h \
  /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/core/include/lf_queue.h \
  /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/core/include/imp_macros.h \
- /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/core/include/thread_utils.h
+ /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/lockFreeQueue/core/include/thread_utils.h \
+ /usr/include/c++/13/queue /usr/include/c++/13/deque \
+ /usr/include/c++/13/bits/stl_deque.h /usr/include/c++/13/bits/deque.tcc \
+ /usr/include/c++/13/bits/stl_heap.h /usr/include/c++/13/bits/stl_queue.h \
+ /usr/include/c++/13/mutex /usr/include/c++/13/bits/std_mutex.h \
+ /usr/include/c++/13/bits/unique_lock.h /usr/include/c++/13/algorithm \
+ /usr/include/c++/13/bits/stl_algo.h \
+ /usr/include/c++/13/bits/algorithmfwd.h \
+ /usr/include/c++/13/bits/uniform_int_dist.h \
+ /usr/include/c++/13/bits/stl_tempbuf.h \
+ /usr/include/c++/13/pstl/glue_algorithm_defs.h \
+ /usr/include/c++/13/pstl/execution_defs.h
