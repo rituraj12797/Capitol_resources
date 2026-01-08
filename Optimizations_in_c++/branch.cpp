@@ -140,14 +140,13 @@ int main() {
     // K Lop is just for increasing the number of iterations to make the test slow enough so that clock test it 
     for(int k = 0 ; k < 500; k++) {
 
-        for(int i = 51 ; i < n - 500; i++) {
-            if(arr[i + k] < med) { 
-                if(arr[k] < med) {
+        for(int i = 51 ; i < n - 500; i++) { // execute  
+            if(arr[i + k] < med) {  // decode
+                if(arr[k] < med) { 
                     sum += arr[i];
                 } else {
                     sum += arr[i]/2;
                 }
-                
             } else {
                 sum -= arr[i];
             }
