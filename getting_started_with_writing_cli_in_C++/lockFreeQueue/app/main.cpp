@@ -163,7 +163,6 @@ void showBenchmark(std::string text, std::vector<std::chrono::duration<double,st
     std::cout<<" P99.9 : "<<write[ind_nine_nine_nine].count()<<"\n";
     std::cout<<" P99.99 : "<<write[ind_nine_nine_nine_nine].count()<<"\n";
     std::cout<<" P99.999 : "<<write[ind_nine_nine_nine_nine_nine].count()<<"\n";
-    std::cout<<" P99.9999 : "<<write[ind_nine_nine_nine_nine_nine_nine].count()<<"\n";
 
 
 
@@ -174,7 +173,6 @@ void showBenchmark(std::string text, std::vector<std::chrono::duration<double,st
     std::cout<<" P99.9 : "<<read[ind_nine_nine_nine].count()<<"\n\n";
     std::cout<<" P99.99 : "<<read[ind_nine_nine_nine_nine].count()<<"\n";
     std::cout<<" P99.999 : "<<read[ind_nine_nine_nine_nine_nine].count()<<"\n";
-    std::cout<<" P99.9999 : "<<read[ind_nine_nine_nine_nine_nine_nine].count()<<"\n";
 
     std::cout<<"\n========================================================================================================\n\n\n";
 }
@@ -227,7 +225,8 @@ int main() {
 	// 	t2->join();
 	// }
     // test set across which test will be performed 
-    int set_size = 1000000;
+
+    int set_size = 100000;
     std::vector<Order> test_set(set_size, Order(5,6,false));
 
 
@@ -245,7 +244,7 @@ int main() {
     auto writer_f = [](std::queue<Order>& std_queue,std::vector<Order>& test_set, std::vector<std::chrono::duration<double,std::nano>>& write_times , std::mutex& mtx, std::atomic<bool>& done ) {
         // write million entries with mutex locks
 
-        for(int i = 0 ; i < 1000000; i++) {
+        for(int i = 0 ; i < 100000; i++) {
             auto start = std::chrono::high_resolution_clock::now();
             mtx.lock();
             std_queue.push(test_set[i]);
@@ -308,8 +307,8 @@ int main() {
 
     // ========================================================   LOCK FREE QUEUE ========================================
 
-    internal_lib::LFQueue<Order> ring_buffer(50000000); //  50 x 1M 
-
+    internal_lib::LFQueue<Order> ring_buffer((set_size)); //  we will make the queue of size (2^x) ==> why ==> so that we can optimise the wrap around from usinfg Division ( ~ 40 CPU cycles) to using bitwise operator -> ( 1 CPU cycle )
+    // ==>  2^26 ~=67M
     std::vector<std::chrono::duration<double,std::nano>> lfq_write_times;
     std::vector<std::chrono::duration<double,std::nano>> lfq_read_times;
 
@@ -317,7 +316,7 @@ int main() {
     auto wf = [](internal_lib::LFQueue<Order>& comm, std::vector<std::chrono::duration<double,std::nano>>& lfq_write_times) {
 
         int cnt = 0; // I Million Orders
-        while(cnt < 1000000) {
+        while(cnt < 100000) {
             auto start = std::chrono::high_resolution_clock::now();
             auto write_ptr = comm.getNextWriteIndex();
             while(write_ptr == nullptr) {
@@ -338,7 +337,7 @@ int main() {
     // read lambda
     auto rf = [](internal_lib::LFQueue<Order>& comm, std::vector<std::chrono::duration<double,std::nano>>& lfq_read_times) {
         int cnt = 0;
-        while(cnt < 1000000) {
+        while(cnt < 100000) {
             auto start = std::chrono::high_resolution_clock::now();
             auto* read_ptr = comm.getNextReadIndex();
             while(read_ptr == nullptr) {
@@ -433,3 +432,215 @@ Thread [reader thread] pinned to Core 1
 
  that 1716 is not actually 1716 but 17 and 16 written together.
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #include<iostream>
+// #include<vector>
+// #include<chrono>
+// #include<atomic>
+// #include<thread>
+// #include<new>
+// #include<queue>
+// #include<mutex>
+// #include<algorithm>
+
+// // INCLUDE YOUR NEW OPTIMIZED HEADER HERE
+// #include "fast_lf_queue.h" 
+// #include "imp_macros.h"
+// #include "thread_utils.h"
+
+
+// struct Order {
+//     int stock_id;
+//     int quantity;
+//     bool buy;
+
+//     Order(int id = 5, int number_of_stocks = 6, bool is_buy = false) {
+//         stock_id = id;
+//         quantity = number_of_stocks;
+//         buy = is_buy;
+//     }
+// };
+
+// int main() {
+//     std::cout<<" Main Thread Executing \n";
+
+//     // Test set size
+//     const int NUM_OPS = 1000000;
+//     std::vector<Order> test_set(NUM_OPS, Order(5,6,false));
+
+
+//     // ======================================= 1. STD QUEUE + MUTEX LOCKS ==============================================
+//     std::cout << "\n--- Benchmarking std::queue + std::mutex ---\n";
+//     std::queue<Order> std_queue;
+//     std::mutex mtx; 
+//     std::atomic<bool> done = {false};
+
+//     std::vector<std::chrono::duration<double,std::nano>> write_times;
+//     std::vector<std::chrono::duration<double,std::nano>> read_times;
+//     write_times.reserve(NUM_OPS);
+//     read_times.reserve(NUM_OPS);
+
+//     // Writer Lambda (Mutex)
+//     auto writer_f = [](std::queue<Order>& std_queue, std::vector<Order>& test_set, std::vector<std::chrono::duration<double,std::nano>>& write_times , std::mutex& mtx, std::atomic<bool>& done ) {
+//         for(int i = 0 ; i < NUM_OPS; i++) {
+//             auto start = std::chrono::high_resolution_clock::now();
+            
+//             mtx.lock();
+//             std_queue.push(test_set[i]);
+//             mtx.unlock();
+            
+//             auto end = std::chrono::high_resolution_clock::now();
+//             write_times.push_back(end - start);
+//         }
+//         done = true;
+//     };
+
+//     // Reader Lambda (Mutex)
+//     auto reader_f = [](std::queue<Order>& std_queue, std::mutex& mtx, std::atomic<bool>& done, std::vector<std::chrono::duration<double,std::nano>>& read_times ) {
+//         int cnt = 0;
+//         while (cnt < NUM_OPS) { 
+//             auto start = std::chrono::high_resolution_clock::now();
+//             mtx.lock();
+            
+//             if (std_queue.empty()) {
+//                 mtx.unlock();
+//                 std::this_thread::yield(); // Backoff
+//                 continue;
+//             }
+
+//             Order entry = std_queue.front();
+//             std_queue.pop();
+//             mtx.unlock();
+            
+//             auto end = std::chrono::high_resolution_clock::now();
+//             read_times.push_back(end - start);
+//             cnt++;
+//         }
+//     };
+
+//     auto writer_thread = internal_lib::createAndStartThread(3,"std writer", writer_f, std::ref(std_queue), std::ref(test_set), std::ref(write_times), std::ref(mtx), std::ref(done));
+//     auto reader_thread = internal_lib::createAndStartThread(4,"std reader", reader_f, std::ref(std_queue), std::ref(mtx), std::ref(done), std::ref(read_times));
+    
+//     if(writer_thread != nullptr) writer_thread->join();
+//     if(reader_thread != nullptr) reader_thread->join();
+
+//     // Stats for Mutex
+//     std::sort(write_times.begin(),write_times.end());
+//     std::cout<<" MUTEX P50   : "<<write_times[write_times.size()*0.50].count()<<"\n";
+//     std::cout<<" MUTEX P99   : "<<write_times[write_times.size()*0.99].count()<<"\n";
+//     std::cout<<" MUTEX P99.9 : "<<write_times[write_times.size()*0.999].count()<<"\n";
+//     std::cout<<" MUTEX P99.99 : "<<write_times[write_times.size()*0.9999].count()<<"\n";
+//     std::cout<<" MUTEX P99.999 : "<<write_times[write_times.size()*0.99999].count()<<"\n";
+//     std::cout<<" MUTEX P99.9999 : "<<write_times[write_times.size()*0.999999].count()<<"\n";
+
+
+//     // ===================================== 2. FAST LOCK FREE QUEUE ========================================
+//     std::cout << "\n--- Benchmarking FastLFQueue (Optimized) ---\n";
+    
+//     // Size will actomatically round up to next Power of 2 inside constructor
+//     internal_lib::FastLFQueue<Order> ring_buffer(NUM_OPS); 
+
+//     std::vector<std::chrono::duration<double,std::nano>> lfq_write_times;
+//     std::vector<std::chrono::duration<double,std::nano>> lfq_read_times;
+//     lfq_write_times.reserve(NUM_OPS);
+//     lfq_read_times.reserve(NUM_OPS);
+
+//     // Writer Lambda (Fast Lock Free)
+//     auto wf = [](internal_lib::FastLFQueue<Order>& comm, std::vector<std::chrono::duration<double,std::nano>>& times) {
+//         int cnt = 0; 
+//         while(cnt < NUM_OPS) {
+//             auto start = std::chrono::high_resolution_clock::now();
+            
+//             // Try to push. If false (full), yield and retry.
+//             // Note: In a real system, you might loop tightly a few times before yielding.
+//             while(!comm.push(Order(cnt, 100, true))) {
+//                  std::this_thread::yield(); 
+//             }
+            
+//             auto end = std::chrono::high_resolution_clock::now();
+//             times.push_back(end - start);
+//             cnt++;
+//         }
+//     };
+
+//     // Reader Lambda (Fast Lock Free)
+//     auto rf = [](internal_lib::FastLFQueue<Order>& comm, std::vector<std::chrono::duration<double,std::nano>>& times) {
+//         int cnt = 0;
+//         while(cnt < NUM_OPS) {
+//             auto start = std::chrono::high_resolution_clock::now();
+            
+//             // Peek to check for data
+//             Order* data = comm.peek();
+//             while(data == nullptr) {
+//                 std::this_thread::yield();
+//                 data = comm.peek();
+//             }
+
+//             // Data is safe to access here because writer won't overwrite it until we pop
+//             volatile int val = data->stock_id; // "Process" the data
+//             (void)val;
+
+//             // Signal we are done with this slot
+//             comm.pop();
+            
+//             auto end = std::chrono::high_resolution_clock::now();
+//             times.push_back(end - start);
+//             cnt++;
+//         }
+//     };
+
+//     // Launch Threads (Lock Free) - Using Cores 5 and 6
+//     auto wt = internal_lib::createAndStartThread(5,"LF Writer", wf, std::ref(ring_buffer), std::ref(lfq_write_times));
+//     auto rt = internal_lib::createAndStartThread(6,"LF Reader", rf, std::ref(ring_buffer), std::ref(lfq_read_times));
+
+//     if(wt != nullptr) wt->join();
+//     if(rt != nullptr) rt->join();
+
+//     std::sort(lfq_write_times.begin(),lfq_write_times.end());
+    
+//     std::cout<<" LFQ P50   : "<<lfq_write_times[lfq_write_times.size()*0.50].count()<<"\n";
+//     std::cout<<" LFQ P99   : "<<lfq_write_times[lfq_write_times.size()*0.99].count()<<"\n";
+//     std::cout<<" LFQ P99.9 : "<<lfq_write_times[lfq_write_times.size()*0.999].count()<<"\n";
+//     std::cout<<" LFQ P99.99 : "<<lfq_write_times[lfq_write_times.size()*0.9999].count()<<"\n";
+//     std::cout<<" LFQ P99.999 : "<<lfq_write_times[lfq_write_times.size()*0.99999].count()<<"\n";
+//     std::cout<<" LFQ P99.9999 : "<<lfq_write_times[lfq_write_times.size()*0.999999].count()<<"\n";
+
+
+//     return 0;
+// }
