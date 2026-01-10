@@ -182,4 +182,5 @@ CMakeFiles/logger.dir/app/main.cpp.o: \
  /usr/include/c++/13/bits/atomic_lockfree_defines.h \
  /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/thread_utils.h \
  /usr/include/c++/13/chrono \
- /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/time_util.h
+ /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/time_util.h \
+ /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/logger.h

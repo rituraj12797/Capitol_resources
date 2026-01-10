@@ -25,26 +25,17 @@ namespace internal_lib {
 		// for now only keep a sinhle int 
 		int x;
 
-		market_data_publisher_log_object(){
-			x = 0;
-		}
 	};
 
 
 	struct limited_order_book_log_object { // this will be the data object lob logs
 		// WE WILL DEFINE THIS WHEN WE WRITE THE LOB COMPONENT  
 		int y;
-		limited_order_book_log_object(){
-			y = 0;
-		}
 	};
 
 	struct network_order_gateway_log_object { // will be the log data whihc network gateway object logs 
 		// WE WILL DEFINE THIS WHEN WE WRITE THE ORDER GATEWAY COMPONENT 
 		int z;
-		network_order_gateway_log_object(){
-			z = 0;
-		}
 	};
 
 	// we make our LogElement 64 bytes long in order to make it fit exactly in one cache line- so that when data pull.push happens complete data gets picked up
@@ -61,7 +52,7 @@ namespace internal_lib {
 			limited_order_book_log_object lob;
 			network_order_gateway_log_object ogw;
 			int64_t generic_data; // for storing custom integer data;
-		} data_object; 
+		} data_object;
 	};
 
 
@@ -99,10 +90,12 @@ namespace internal_lib {
 		internal_lib::LFQueue<LogElement>* lob_queue; // pointer to limited order book  logger
 		internal_lib::LFQueue<LogElement>* network_gw_queue; // pointer to network gate way logger
 
-		std::atomic<bool> running = {false};
 		std::string file_path;
+		std::atomic<bool> running = {true};
+
 
 		public : 
+
 
 		Async_Logger(std::string& path,
 					internal_lib::LFQueue<LogElement>* mkpbq,
@@ -111,14 +104,18 @@ namespace internal_lib {
 			// empty body here 	
 		}
 
+		void stop() noexcept {
+			running = false;
+		}
+
 		void run() noexcept {
 			std::ofstream file(file_path, std::ios::out | std::ios::trunc); // if the file exists it clears the content inside it if it doesnt exists it will create a new one 
 		 	
-		 	ASSERT(file.is_open(), " FILE not accessible ")
+		 	ASSERT(file.is_open(), " FILE not accessible ");
 
 		 	std::vector<char> buff(128*1024); // defined a custom buffer of size 128 kb;
 
-		 	file.rdbuf()->pubsetbuf(buf.data(),buf.size());
+		 	file.rdbuf()->pubsetbuf(buff.data(),buff.size());
 		 	// MACRO OPTIMIZATION 
 
 		 	// we do a tweaking here 

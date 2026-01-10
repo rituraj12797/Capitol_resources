@@ -4,6 +4,7 @@
 CMakeFiles/logger.dir/app/main.cpp.o: /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/app/main.cpp \
   /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/imp_macros.h \
   /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/lf_queue.h \
+  /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/logger.h \
   /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/thread_utils.h \
   /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/time_util.h \
   /usr/include/alloca.h \
@@ -354,7 +355,7 @@ CMakeFiles/logger.dir/app/main.cpp.o: /home/rituraj12797/Capitol_resources/getti
 
 /usr/include/stdc-predef.h:
 
-/usr/include/c++/13/bits/stl_algobase.h:
+/usr/include/sched.h:
 
 /usr/include/c++/13/bits/std_thread.h:
 
@@ -404,10 +405,6 @@ CMakeFiles/logger.dir/app/main.cpp.o: /home/rituraj12797/Capitol_resources/getti
 
 /usr/include/c++/13/bits/basic_ios.tcc:
 
-/usr/include/c++/13/bits/codecvt.h:
-
-/usr/include/c++/13/bits/stl_vector.h:
-
 /usr/include/c++/13/ios:
 
 /usr/include/c++/13/new:
@@ -421,18 +418,6 @@ CMakeFiles/logger.dir/app/main.cpp.o: /home/rituraj12797/Capitol_resources/getti
 /usr/include/c++/13/bits/alloc_traits.h:
 
 /usr/include/c++/13/bits/concept_check.h:
-
-/usr/include/c++/13/bits/locale_facets.tcc:
-
-/usr/include/c++/13/bits/requires_hosted.h:
-
-/usr/include/c++/13/bits/string_view.tcc:
-
-/usr/include/features.h:
-
-/usr/include/c++/13/backward/binders.h:
-
-/usr/include/c++/13/bits/stringfwd.h:
 
 /usr/include/alloca.h:
 
@@ -459,6 +444,22 @@ CMakeFiles/logger.dir/app/main.cpp.o: /home/rituraj12797/Capitol_resources/getti
 /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
 
 /home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/app/main.cpp:
+
+/usr/include/c++/13/bits/locale_facets.tcc:
+
+/usr/include/c++/13/bits/requires_hosted.h:
+
+/usr/include/c++/13/bits/string_view.tcc:
+
+/usr/include/features.h:
+
+/usr/include/c++/13/backward/binders.h:
+
+/usr/include/c++/13/bits/stringfwd.h:
+
+/usr/include/c++/13/bits/codecvt.h:
+
+/usr/include/c++/13/bits/stl_vector.h:
 
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 
@@ -512,7 +513,11 @@ CMakeFiles/logger.dir/app/main.cpp.o: /home/rituraj12797/Capitol_resources/getti
 
 /usr/include/c++/13/bits/cpp_type_traits.h:
 
+/home/rituraj12797/Capitol_resources/getting_started_with_writing_cli_in_C++/logger_demo/core/include/logger.h:
+
 /usr/include/c++/13/bits/cxxabi_forced.h:
+
+/usr/include/c++/13/bits/stl_algobase.h:
 
 /usr/include/c++/13/bits/allocator.h:
 
@@ -681,5 +686,3 @@ CMakeFiles/logger.dir/app/main.cpp.o: /home/rituraj12797/Capitol_resources/getti
 /usr/include/linux/errno.h:
 
 /usr/include/pthread.h:
-
-/usr/include/sched.h:
