@@ -16,18 +16,37 @@ namespace internal_lib {
 
 	class LFQueue final { // why final here ===> final is a keyword that emans no other class is going to inheit this class hence the compile devirtualizes it ==> performance gains 
 	private :
+
+		// std::atomic<size_t> next_index_to_read = {0};   
+		// std::atomic<size_t> next_index_to_write = {0};
+
+		alignas(64) std::atomic<size_t> next_index_to_read = {0};   
+		alignas(64) size_t lazy_write = {0};
+
 		std::vector<T> store_; 
 
-		std::atomic<size_t> next_index_to_read = {0};   
-		std::atomic<size_t> next_index_to_write = {0};
-
+		alignas(64) std::atomic<size_t> next_index_to_write = {0};
+		alignas(64) size_t lazy_read = {0};
 		
 
 	public : 
-		explicit LFQueue(std::size_t capacity ) : store_(capacity, T()){  // initialize size here 
-		// explicit used here to prevent any auto type conversion 
-			 // initialized the queue with a certain capacitiy
-			// empty body 
+		size_t buffer_size = 2;
+		size_t capacity_mask = buffer_size - 1; // the mask we will use to wrap
+
+		explicit LFQueue(std::size_t capacity ){  
+
+			size_t target_size = capacity;
+    		if(target_size < 50 * capacity) target_size = 50 * capacity; //  multiplier logic
+
+    		buffer_size = 2;
+
+    		while(buffer_size < target_size) {
+        		buffer_size *= 2;
+    		}
+
+    		capacity_mask = buffer_size - 1;
+
+    		store_.resize(buffer_size);
 		}
 
 		// delete extra constructors
@@ -38,27 +57,52 @@ namespace internal_lib {
 
 		LFQueue& operator = (const LFQueue&) = delete;
 		LFQueue& operator = (const LFQueue&&) = delete;
-
-		auto getNextWrite() noexcept {
+		T* getNextWrite() noexcept {
 			// we see is the queue is fulll then reruner thenull ptr 
 			// an Important lesson here 
-			return (((next_index_to_write + 1)%store_.size()) == next_index_to_read ? nullptr : &store_[next_index_to_write]);
+
+			if(((next_index_to_write + 1)&(capacity_mask)) == lazy_read) { // we arrived where last time read was found 
+				// now found where exactlky is this read 
+				if((next_index_to_write + 1)&(capacity_mask) == next_index_to_read) {
+					return nullptr;
+				}
+				lazy_read = next_index_to_read;
+			}
+
+			return &(store_[next_index_to_write]);
 		}
 
 		auto updateWrite() noexcept { // no contention here as our queue is SPSC ==> sngle producer single consumer ==> only one writer to only it will uipdate the write index 
-			internal_lib::ASSERT(((next_index_to_write + 1)%store_.size()) != next_index_to_read ," Queue full thread must wait before further writing");
-			next_index_to_write = (next_index_to_write + 1)%(store_.size());
-			// I know this is not a simple operation so it is not atomic but since we have a single writer no contention will happen here/
+
+			if( ((next_index_to_write + 1)&( capacity_mask)) == lazy_read) {
+				lazy_read = next_index_to_read;
+				internal_lib::ASSERT( ((next_index_to_write + 1)&( capacity_mask)) != lazy_read ," Queue full thread must wait before further writing");
+			}
+
+			next_index_to_write = ((next_index_to_write + 1)&( capacity_mask));
 		}
 
-		auto getNextRead() noexcept {
+		T* getNextRead() noexcept {
 			// if the consumer consumed all the values and is now pointing to the next write index ==> means the place to which it is pointintg has no data yet so we return nullptr
-			return (next_index_to_read == next_index_to_write ? nullptr : &(store_[next_index_to_read]));
+
+			if(next_index_to_read == lazy_write) {
+				if(next_index_to_read == next_index_to_write) {
+					return nullptr;
+				}
+				lazy_write = next_index_to_write;
+			}
+
+			return &(store_[next_index_to_read]);
 		}
 
 		auto updateRead() noexcept {
-			internal_lib::ASSERT(next_index_to_read != next_index_to_write," Nothing to consume by thread ");
-			next_index_to_read = (next_index_to_read + 1)%(store_.size());
+
+			if(next_index_to_read == lazy_write) {
+				lazy_write = next_index_to_write;
+				internal_lib::ASSERT(next_index_to_read != lazy_write," Nothing to consume by thread ");
+			}
+
+			next_index_to_read = ((next_index_to_read + 1)&( capacity_mask));
 		}	
 
 
@@ -125,3 +169,5 @@ namespace internal_lib {
 	===>     write == read means it is empty 
 
 */
+
+

@@ -152,7 +152,6 @@ void showBenchmark(std::string text, std::vector<std::chrono::duration<double,st
     int ind_nine_nine_nine = (999*write.size())/(1000);
     int ind_nine_nine_nine_nine = (write.size()/10000)*9999;
     int ind_nine_nine_nine_nine_nine = (write.size()/100000)*99999;
-    int ind_nine_nine_nine_nine_nine_nine = (write.size()/1000000)*999999;
 
     std::cout<<" ========================================= BENCHMARK PERFORMANCE FOR "<<text<<"================================ \n\n\n";
     /* ======================= BENCHMARK RESULTS NOW ===============================  */
