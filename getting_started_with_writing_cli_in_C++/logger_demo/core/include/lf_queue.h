@@ -36,7 +36,7 @@ namespace internal_lib {
 		explicit LFQueue(std::size_t capacity ){  
 
 			size_t target_size = capacity;
-    		if(target_size < 50 * capacity) target_size = 50 * capacity; //  multiplier logic
+    		if(target_size < 5 * capacity) target_size = 5 * capacity; //  multiplier logic
 
     		buffer_size = 2;
 

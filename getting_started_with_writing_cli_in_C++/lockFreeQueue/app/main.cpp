@@ -26,121 +26,7 @@ struct Order {
 	}
 };
 
-// void writerFunction(internal_lib::LFQueue<Order> &comm) noexcept {
 
-// 	// let us do say 20 fast insertions and 20 slow reads 
-
-// 	int cnt = 20;
-// 	auto write_ptr = comm.getNextWriteIndex();
-
-// 	while(true) {
-// 		while(write_ptr != nullptr) {
-// 			cnt--; // dicrenment count
-// 			*write_ptr = Order(20 - cnt); // id ==> 0 1 2 3 4  . . . . . 20
-// 			std::cout<<" Written 20 - cnt \n";
-// 			comm.updateWriteIndex(); // tries to update the write index 
-// 			write_ptr = comm.getNextWriteIndex() ;
-// 		}
-// 		write_ptr = comm.getNextWriteIndex();
-// 	}
-
-// }
-
-void writerFunction(internal_lib::LFQueue<Order> &comm) noexcept {
-    int cnt = 0;
-    // simulate for 5 orders 
-    while(cnt < 20) {
-        
-        auto* write_ptr = comm.getNextWriteIndex();
-
-        // BUSY WAIT  ==> Backpressure preventing it from writing 
-        // if the queue is full (nullptr) we stay in this loop until space opens up.
-        while(write_ptr == nullptr) {
-            // "Market" is too fast, reader is too slow.
-
-            // what we do ?? ==> Sleep and try again later ? or  Kepe trying again and again and again ? 
-
-            // ---------------------------------------------------------
-        	// STRATEGY: OPTIMAL WAITING (YIELD VS SLEEP VS SPIN)    == USED GEN AI HERE TO WRITE WHY WE USED yield 
-       		// ---------------------------------------------------------
-        
-        	// 1. WHY NOT BUSY SPIN? (while(true) {})
-        	//    Pure spinning burns 100% CPU on the core. This generates heat and 
-        	//    consumes power. Crucially, if we are on a hyper-threaded core, 
-        	//    spinning starves the *other* thread (e.g., the Reader) that we 
-        	//    are desperately waiting for.
-        
-        	// 2. WHY NOT SLEEP? (std::this_thread::sleep_for)
-        	//    Sleep puts the thread into a 'WAITING' or 'SUSPENDED' state.
-        	//    The OS removes it from the run queue. Waking it up requires:
-        	//      a. An interrupt or timer event.
-        	//      b. The OS Scheduler to decide to reschedule us.
-        	//      c. Context switching back to 'READY' then 'RUNNING'.
-        	//    In HFT, this "Wake Up Latency" (often >10-50 microseconds) is an eternity.
-
-        	// 3. THE SOLUTION: YIELD (std::this_thread::yield)
-        	//    Yield tells the OS: "I am done with my current time slice, but I am still
-        	//    ready to work."
-        	//    - State remains: READY (not SUSPENDED).
-        	//    - Action: Moves this thread to the back of the generic CPU run queue.
-        	//    - Result: Allows the other thread to run immediately, but we can return 
-        	//      to execution much faster (nanoseconds/microseconds) than waking from sleep.
-
-
-            std::this_thread::yield(); 
-            
-            // after running again eed to check if we can send now or not 
-            write_ptr = comm.getNextWriteIndex();
-        }
-
-        //  We broke out of the loop that means write_ptr is valid now and we can push an entry in the queue 
-        *write_ptr = Order(cnt, 100, true); 
-        std::cout << "[writer] Order Sent: " << cnt << "\n";
-
-        comm.updateWriteIndex();
-        
-        cnt++;
-        
-    }
-    std::cout << "[writer] Closed. All orders sent.\n";
-}
-
-
-void readerFunction(internal_lib::LFQueue<Order> &comm) noexcept {
-    int cnt = 0;
-    while(cnt < 20) {
-        auto* read_ptr = comm.getNextReadIndex();
-
-        // spin until data arrives
-        while(read_ptr == nullptr) {
-            std::this_thread::yield();
-            read_ptr = comm.getNextReadIndex(); // refresh status
-        }
-
-        // data found ===> process it
-        std::cout << "\t[reader] Processed: " << read_ptr->stock_id << "\n";
-
-        comm.updateNextReadIndex();
-        cnt++;
-    }
-    std::cout << "[reader] Stopped.\n";
-}
-
-// void readerFunction(internal_lib::LFQueue<Order> &comm) noexcept {
-
-
-// 	auto read_ptr = comm.getNextReadIndex();
-
-// 	while(true) {
-// 		while(read_ptr != nullptr) {
-// 			std::cout<<" Read  "<<read_ptr->stock_id<<"\n";
-// 			comm.updateNextReadIndex(); // tries to update the write index 
-// 			read_ptr = comm.getNextReadIndex() ;
-// 		}
-// 	}
-
-
-// }	
 
 void showBenchmark(std::string text, std::vector<std::chrono::duration<double,std::nano>>& write, std::vector<std::chrono::duration<double,std::nano>>& read ) {
     std::sort(write.begin(),write.end());
@@ -317,14 +203,18 @@ int main() {
         int cnt = 0; // I Million Orders
         while(cnt < 100000) {
             auto start = std::chrono::high_resolution_clock::now();
-            auto write_ptr = comm.getNextWriteIndex();
+            auto write_ptr = comm.getNextWrite();
             while(write_ptr == nullptr) {
                 std::this_thread::yield();
-                write_ptr = comm.getNextWriteIndex();
+                write_ptr = comm.getNextWrite();
             }   
 
-            *write_ptr = Order(cnt, 100, true); 
-            comm.updateWriteIndex();
+            // *write_ptr = Order(cnt, 100, true); 
+
+            // instead of creating and copying we can create at the location itself preventing creation and deletion of an extra copy 
+            new (write_ptr) Order(cnt, 100, true);
+
+            comm.updateWrite();
             cnt++;
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double,std::nano>  interval = end - start;
@@ -338,12 +228,12 @@ int main() {
         int cnt = 0;
         while(cnt < 100000) {
             auto start = std::chrono::high_resolution_clock::now();
-            auto* read_ptr = comm.getNextReadIndex();
+            auto* read_ptr = comm.getNextRead();
             while(read_ptr == nullptr) {
                 std::this_thread::yield();
-                read_ptr = comm.getNextReadIndex(); 
+                read_ptr = comm.getNextRead(); 
             }
-            comm.updateNextReadIndex();
+            comm.updateRead();
             cnt++;
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double,std::nano>  interval = end - start;

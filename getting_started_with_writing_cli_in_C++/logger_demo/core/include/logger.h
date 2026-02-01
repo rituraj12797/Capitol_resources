@@ -21,10 +21,8 @@ namespace internal_lib {
 	// market data
 	struct market_data_publisher_log_object { // this will be the data object that the market publishers logs
 		// WE WILL DEFINE THIS WHEN WE WRITE THE MARKET DATA PUBLISHER COMPONENT 
-
 		// for now only keep a sinhle int 
 		int x;
-
 	};
 
 
@@ -104,6 +102,8 @@ namespace internal_lib {
 			// empty body here 	
 		}
 
+
+		
 		void stop() noexcept {
 			running = false;
 		}

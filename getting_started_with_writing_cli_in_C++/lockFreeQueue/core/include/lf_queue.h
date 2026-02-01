@@ -36,11 +36,12 @@ namespace internal_lib {
 		explicit LFQueue(std::size_t capacity ){  
 
 			size_t target_size = capacity;
-    		if(target_size < 50 * capacity) target_size = 50 * capacity; //  multiplier logic
+            // Removed aggressive 5x multiplier which caused excessive memory usage (bloat)
+    		// if(target_size < 5 * capacity) target_size = 5 * capacity; 
 
     		buffer_size = 2;
 
-    		while(buffer_size < target_size) {
+    		while(buffer_size < target_size + 1) { // Ensure buffer_size > capacity to accommodate full queue
         		buffer_size *= 2;
     		}
 
@@ -57,13 +58,13 @@ namespace internal_lib {
 
 		LFQueue& operator = (const LFQueue&) = delete;
 		LFQueue& operator = (const LFQueue&&) = delete;
-		T* getNextWriteIndex() noexcept {
+		T* getNextWrite() noexcept {
 			// we see is the queue is fulll then reruner thenull ptr 
 			// an Important lesson here 
 
-			if((next_index_to_write + 1)&(capacity_mask) == lazy_read) { // we arrived where last time read was found 
+			if(((next_index_to_write + 1)&(capacity_mask)) == lazy_read) { // we arrived where last time read was found 
 				// now found where exactlky is this read 
-				if((next_index_to_write + 1)&(capacity_mask) == next_index_to_read) {
+				if(((next_index_to_write + 1)&(capacity_mask) )== next_index_to_read) {
 					return nullptr;
 				}
 				lazy_read = next_index_to_read;
@@ -72,7 +73,7 @@ namespace internal_lib {
 			return &(store_[next_index_to_write]);
 		}
 
-		auto updateWriteIndex() noexcept { // no contention here as our queue is SPSC ==> sngle producer single consumer ==> only one writer to only it will uipdate the write index 
+		auto updateWrite() noexcept { // no contention here as our queue is SPSC ==> sngle producer single consumer ==> only one writer to only it will uipdate the write index 
 
 			if( ((next_index_to_write + 1)&( capacity_mask)) == lazy_read) {
 				lazy_read = next_index_to_read;
@@ -82,7 +83,7 @@ namespace internal_lib {
 			next_index_to_write = ((next_index_to_write + 1)&( capacity_mask));
 		}
 
-		T* getNextReadIndex() noexcept {
+		T* getNextRead() noexcept {
 			// if the consumer consumed all the values and is now pointing to the next write index ==> means the place to which it is pointintg has no data yet so we return nullptr
 
 			if(next_index_to_read == lazy_write) {
@@ -95,7 +96,7 @@ namespace internal_lib {
 			return &(store_[next_index_to_read]);
 		}
 
-		auto updateNextReadIndex() noexcept {
+		auto updateRead() noexcept {
 
 			if(next_index_to_read == lazy_write) {
 				lazy_write = next_index_to_write;
